@@ -49,13 +49,27 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
    ```
 
 4. **Configuration de Whisper** :
+
    Le projet utilise le modèle Whisper d'OpenAI pour la transcription. Vous devrez installer et configurer Whisper. Vous pouvez utiliser la version disponible sur Whisper GitHub.
+   
    Pour installer Whisper, exécutez la commande suivante :
 
-   
    ```bash
    pip install git+https://github.com/openai/whisper.git
    ```
+6. **Ajouter votre token pour pyannote/speaker-diarization** :
+   
+   Le projet utilise le modèle speaker-diarization pour la diarization. Vous aurez alors besoin d'un token d'authentification de HuggingFace pour ce modèle. Pour avoir le droit d'utiliser le modèle, allez sur https://huggingface.co/pyannote/speaker-diarization et demandez l'accès (c'est instantané).
+
+   Dans transcription/consumers.py, remplacez :
+
+   ```bash
+  diarization_pipeline = Pipeline.from_pretrained(
+  "pyannote/speaker-diarization",
+  use_auth_token="your_token_here")
+  ```
+   Par votre token.
+
 ## Lancer le projet :
 
 1. **Appliquez les migrations de base de données** :
