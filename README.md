@@ -22,6 +22,7 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
 - **Python 3.9+** : Assurez-vous que Python est installé sur votre machine.
 - **Django** : Le framework web utilisé pour ce projet.
 - **Whisper** : Le modèle de transcription développé par OpenAI.
+- -**Pyannote/speaker-diarization** : Le modèle de diarization disponible sur HuggingFace.
 - **Dépendances supplémentaires** : Pour gérer l'audio, la gestion des API et d'autres fonctions.
 
 ## Installation
