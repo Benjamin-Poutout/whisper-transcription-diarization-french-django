@@ -26,44 +26,47 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
 
 ## Installation
 
-1. **Clonez le dépôt** :
+   1. **Clonez le dépôt** :
 
-   Clonez ce projet sur votre machine locale en utilisant Git :
-
-   ```bash
-   git clone https://github.com/Benjamin-Poutout/whisper-transcription-french-django.git
-   cd whisper-transcription-french-django
-   ```
-
-2. **Créez un environnement virtuel** :
+      Clonez ce projet sur votre machine locale en utilisant Git :
    
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # Sur Windows, utilisez 'venv\Scripts\activate'
-   ```
+      ```bash
+      git clone https://github.com/Benjamin-Poutout/whisper-transcription-french-django.git
+      cd whisper-transcription-french-django
+      ```
 
-3. **Installer les bibliothèques nécesaires** :
+   2. **Créez un environnement virtuel** :
+      
+      ```bash
+      python3 -m venv venv
+      source venv/bin/activate  # Sur Windows, utilisez 'venv\Scripts\activate'
+      ```
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+   3. **Installer les bibliothèques nécesaires** :
+      
+      ```bash
+      pip install -r requirements.txt
+      ```
+      
+   4. **Créer votre Docker Image** :
 
-4. **Configuration de Whisper** :
-
-   Le projet utilise le modèle Whisper d'OpenAI pour la transcription. Vous devrez installer et configurer Whisper. Vous pouvez utiliser la version disponible sur Whisper GitHub.
+      Vérifiez que vous avez docker et docker compose disponible sur votre machine locale.
+      
+      ```bash
+      docker --version
+      docker compose version
+      ```
+      Dans le répertoire contenant le Dockerfile, exécutez la commande suivante :
    
-   Pour installer Whisper, exécutez la commande suivante :
-
-   ```bash
-   pip install git+https://github.com/openai/whisper.git
-   ```
-6. **Ajouter votre token pour pyannote/speaker-diarization** :
+      ```bash
+      sudo docker build -t my-django-app:latest .
+      ```
+   6. **Ajouter votre token pour pyannote/speaker-diarization** :
    
-   Le projet utilise le modèle speaker-diarization pour la diarization. Vous aurez alors besoin d'un token d'authentification de HuggingFace pour ce modèle. Pour avoir le droit d'utiliser le modèle, allez sur https://huggingface.co/pyannote/speaker-diarization et demandez l'accès (c'est instantané).
-
-   Dans transcription/consumers.py, remplacez :
-
-  diarization_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",use_auth_token="your_token_here") par votre token.
+      Le projet utilise le modèle speaker-diarization pour la diarization. Vous aurez alors besoin d'un token d'authentification de HuggingFace pour ce modèle. Pour avoir le droit d'utiliser le modèle, allez sur https://huggingface.co/pyannote/speaker-diarization et demandez l'accès (c'est instantané).
+   
+      Dans transcription/consumers.py, remplacez :
+      diarization_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",use_auth_token="your_token_here") par votre token.
 
 ## Lancer le projet :
 
