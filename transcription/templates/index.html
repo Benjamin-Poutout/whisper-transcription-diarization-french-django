@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcription et Diarisation en Temps Réel</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-2xl font-bold text-center mb-4">Transcription de Voix et Diarisation en Temps Réel</h1>
+        <p class="text-center text-gray-600 mb-6">
+            Enregistrez votre voix et obtenez une transcription et une diarisation audio en temps réel avec Whisper Large-V3.
+        </p>
+
+        <!-- Sélection du nombre de locuteurs -->
+        <div class="flex items-center mb-6">
+            <label for="numSpeakers" class="mr-2 text-lg font-semibold text-gray-700">
+                Nombre de locuteurs :
+            </label>
+            <input type="number" id="numSpeakers" min="1" value="1" 
+                   class="w-24 p-2 border border-gray-300 rounded text-center focus:ring focus:ring-blue-200 mr-2" />
+            <button id="setSpeakersButton" 
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                Définir
+            </button>
+        </div>
+
+        <!-- Boutons de contrôle d'enregistrement -->
+        <div class="flex justify-center gap-4 mb-6">
+            <button id="startRecording" 
+                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                Commencez l'enregistrement
+            </button>
+            <button id="stopRecording" disabled 
+                    class="px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed">
+                Arrêtez l'enregistrement
+            </button>
+        </div>
+
+        <!-- Transcription -->
+        <div>
+            <h2 class="text-xl font-semibold mb-2">Transcription :</h2>
+            <textarea id="transcription" readonly 
+                      class="w-full h-40 p-4 border border-gray-300 rounded resize-none placeholder-gray-400"
+                      placeholder="Le texte transcrit apparaîtra ici..."></textarea>
+        </div>
+
+        <!-- Diarization Results -->
+        <div>
+            <h2 class="text-xl font-semibold mb-2">Résultats de la Diarisation :</h2>
+            <textarea id="diarization" readonly 
+                      class="w-full h-40 p-4 border border-gray-300 rounded resize-none placeholder-gray-400"
+                      placeholder="Le texte avec la diarization apparaîtra ici..."></textarea>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="mt-10 text-center">
+        <p class="text-gray-600 mb-4">Projet open-source disponible sur GitHub :</p>
+        <a href="https://github.com/Benjamin-Poutout/whisper-transcription-french-django/tree/main" target="_blank" 
+           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition">
+            <img src="{% static 'github-logo.png' %}" alt="GitHub Logo" class="w-6 h-6">
+            <span>Voir le dépôt sur GitHub</span>
+        </a>
+    </footer>
+
+    <!-- Charger le script après tout le DOM -->
+    <script src="{% static 'index.js' %}"></script>
+</body>
+</html>
