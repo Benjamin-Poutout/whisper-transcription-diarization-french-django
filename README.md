@@ -87,7 +87,7 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
    ```
    Le serveur sera accessible à l'adresse http://127.0.0.1:8000/.
    
-3. **Choisissez le nombre de locuteurs ** 
+3. **Choisissez le nombre de locuteurs** 
 
 ## API :
 
