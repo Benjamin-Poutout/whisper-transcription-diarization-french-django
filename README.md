@@ -86,6 +86,7 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
    python manage.py runserver
    ```
    Le serveur sera accessible à l'adresse http://127.0.0.1:8000/.
+   
 3. **Choisissez le nombre de locuteurs ** 
 
 ## API :
