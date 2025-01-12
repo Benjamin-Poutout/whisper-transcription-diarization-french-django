@@ -89,7 +89,7 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
    
 3. **Choisissez le nombre de locuteurs** :
 
-   Précisez le nombre de locuteurs afin d'avoir une diarization de meilleure qualité.
+   Précisez le nombre de locuteurs afin d'avoir une diarization de meilleure qualité, et clickez sur définir.
 
 ## API :
 
