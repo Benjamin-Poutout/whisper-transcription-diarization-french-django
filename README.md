@@ -63,11 +63,7 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
 
    Dans transcription/consumers.py, remplacez :
 
-  diarization_pipeline = Pipeline.from_pretrained(
-  "pyannote/speaker-diarization",
-  use_auth_token="your_token_here")
-  
-   Par votre token.
+  diarization_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization",use_auth_token="your_token_here") par votre token.
 
 ## Lancer le projet :
 
