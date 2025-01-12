@@ -1,17 +1,18 @@
 # Projet Django - Transcription en Temps Réel avec Whisper et Diarization avec Pyannote
 
-Ce projet implémente un service de transcription en temps réel en utilisant le modèle Whisper d'OpenAI. Il permet de transcrire des fichiers audio en texte en temps réel, grâce à une API construite avec Django. L'application est conçue pour être flexible, scalable et facile à intégrer dans des environnements de production.
+Ce projet implémente un service de transcription en temps réel et diarization en utilisant le modèle Whisper d'OpenAI et Pyannote-aduio. Il permet de transcrire des fichiers audio en texte en temps réel, grâce à une API construite avec Django et de diarizer ensuite la transcription. L'application est conçue pour être flexible, scalable et facile à intégrer dans des environnements de production.
 
 ## Fonctionnalités
 
 - Transcription en temps réel de fichiers audio
 - Utilisation du modèle Whisper pour la conversion audio -> texte
 - Communication en temps réel au microphone intégré du naviagateur avec ASGI et Websocket.
+- Diarization de la transcription.
 - Interface simple pour démarrer une transcription et récupérer les résultats
 
 ## Visualisation :
 
-Voici ce que vous devriez voir une fois sur http://127.0.0.1:8000/.
+Voici ce que vous devriez voir une fois sur http://127.0.0.1:8000/ après avoir transcrit du texte.
 
 ![Mon image](static/diarization.png)
 
@@ -79,13 +80,14 @@ Avant de commencer, vous devez installer et configurer les éléments suivants :
    python manage.py migrate
    ```
 2. **Démarrez le serveur Django** :
-
    Lancez le serveur de développement Django avec la commande suivante :
 
    ```bash
    python manage.py runserver
    ```
    Le serveur sera accessible à l'adresse http://127.0.0.1:8000/.
+3. **Choisissez le nombre de locuteurs ** 
+
 ## API :
 
 Le projet expose une API pour interagir avec le service de transcription en temps réel. Vous pourrez alors enregistrer votre voix et voir la transcription en temps réel s'afficher sur http://127.0.0.1:8000/.
