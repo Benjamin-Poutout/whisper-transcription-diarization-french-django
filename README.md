@@ -20,7 +20,7 @@ Voici ce que vous devriez voir une fois sur http://127.0.0.1:8000/ après avoir 
 
 Avant de commencer, vous devez installer et configurer les éléments suivants :
 
-- **Python 3.9+** : Assurez-vous que Python est installé sur votre machine.
+- **Python 3.12** : Assurez-vous que Python est installé sur votre machine.
 - **Django** : Le framework web utilisé pour ce projet.
 - **Whisper** : Le modèle de transcription développé par OpenAI.
 - **Pyannote/speaker-diarization** : Le modèle de diarization disponible sur HuggingFace.
