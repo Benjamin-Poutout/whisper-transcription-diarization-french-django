@@ -43,7 +43,7 @@ class TranscriptionConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         if self.groups is None:
-            self.groups = {}  # Initialisation si nécessaire
+            self.groups = {}
         await self.accept()
         logging.info("WebSocket connection established.")
 
@@ -91,7 +91,6 @@ class TranscriptionConsumer(AsyncWebsocketConsumer):
                 # Si le message 'stop' est reçu, marquer l'enregistrement comme terminé
                 self.recording_stopped = True
                 print("Recording stopped set to True")  # Vérification de l'état
-                # Vous pouvez déclencher des actions ici pour effectuer des traitements après l'arrêt.
                 if self.is_recording_stopped():
                     print("Performing diarization after stop")
 
@@ -208,7 +207,7 @@ class TranscriptionConsumer(AsyncWebsocketConsumer):
                     'transcription': transcription
                 })
 
-            # Organiser et afficher les résultats
+            # Affichage des résultats :
             diarization_info = []
             for result in transcription_results:
                 diarization_info.append(f"{result['speaker']}: {result['transcription']}")
