@@ -40,7 +40,42 @@ socket.onmessage = (event) => {
     } else if (message.type === "diarization") {
         const diarization = message.data;
         console.log("Diarization received: ", diarization);
-        document.getElementById("diarization").innerText = diarization;  // Afficher la diarisation
+        
+        // Afficher la diarisation dans la zone prévue
+        document.getElementById("diarization").innerText = diarization;
+
+        // Rendre la section de résultat visible
+        const resultSection = document.getElementById("result-section");
+        resultSection.style.display = "block";  // Rendre la section visible
+
+        // Vous pouvez également ajouter une option pour télécharger le fichier (format choisi)
+        // Exemple : générer un fichier JSON ou CSV à partir des résultats de la diarisation
+        const saveButton = document.getElementById("save-btn");
+        saveButton.addEventListener("click", () => {
+            const formatSelect = document.getElementById("format-select");
+            const selectedFormat = formatSelect.value;
+
+            let fileContent = '';
+            if (selectedFormat === 'json') {
+                fileContent = JSON.stringify({ diarization: diarization }, null, 2);
+            } else if (selectedFormat === 'csv') {
+                fileContent = "speaker,start,end,transcription\n";
+                diarization.forEach(item => {
+                    fileContent += `${item.speaker},${item.start},${item.end},${item.transcription}\n`;
+                });
+            } else if (selectedFormat === 'txt') {
+                diarization.forEach(item => {
+                    fileContent += `${item.speaker}: ${item.transcription}\n`;
+                });
+            }
+
+            // Créer un Blob avec le contenu du fichier
+            const blob = new Blob([fileContent], { type: selectedFormat === 'json' ? 'application/json' : 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `diarization.${selectedFormat}`; // Nom du fichier
+            link.click(); // Déclenche le téléchargement
+        });
     }
 };
 
