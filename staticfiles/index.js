@@ -12,10 +12,71 @@ socket.onopen = () => {
     console.log("Connected to WebSocket");
 };
 
+// Envoyer le nombre de locuteurs dès que l'utilisateur clique sur le bouton
+const setSpeakersButton = document.getElementById("setSpeakersButton");
+if (setSpeakersButton) {
+    setSpeakersButton.addEventListener("click", () => {
+        const numSpeakers = parseInt(document.getElementById("numSpeakers").value, 10);
+        if (!isNaN(numSpeakers)) {
+            socket.send(JSON.stringify({ type: 'set_speakers', numSpeakers: numSpeakers }));
+            console.log(`Number of speakers set to: ${numSpeakers}`);
+        } else {
+            console.error("Invalid number of speakers");
+        }
+    });
+} else {
+    console.error("setSpeakersButton not found");
+}
+
 socket.onmessage = (event) => {
-    const transcription = event.data;
-    console.log("Transcription received: ", transcription);
-    document.getElementById("transcription").innerText = transcription;
+    // Convertir l'événement en JSON
+    const message = JSON.parse(event.data);
+
+    // Vérifier le type du message et afficher les informations correspondantes
+    if (message.type === "transcription") {
+        const transcription = message.data;
+        console.log("Transcription received: ", transcription);
+        document.getElementById("transcription").innerText = transcription;  // Afficher la transcription
+    } else if (message.type === "diarization") {
+        const diarization = message.data;
+        console.log("Diarization received: ", diarization);
+        
+        // Afficher la diarisation dans la zone prévue
+        document.getElementById("diarization").innerText = diarization;
+
+        // Rendre la section de résultat visible
+        const resultSection = document.getElementById("result-section");
+        resultSection.style.display = "block";  // Rendre la section visible
+
+        // Vous pouvez également ajouter une option pour télécharger le fichier (format choisi)
+        // Exemple : générer un fichier JSON ou CSV à partir des résultats de la diarisation
+        const saveButton = document.getElementById("save-btn");
+        saveButton.addEventListener("click", () => {
+            const formatSelect = document.getElementById("format-select");
+            const selectedFormat = formatSelect.value;
+
+            let fileContent = '';
+            if (selectedFormat === 'json') {
+                fileContent = JSON.stringify({ diarization: diarization }, null, 2);
+            } else if (selectedFormat === 'csv') {
+                fileContent = "speaker,start,end,transcription\n";
+                diarization.forEach(item => {
+                    fileContent += `${item.speaker},${item.start},${item.end},${item.transcription}\n`;
+                });
+            } else if (selectedFormat === 'txt') {
+                diarization.forEach(item => {
+                    fileContent += `${item.speaker}: ${item.transcription}\n`;
+                });
+            }
+
+            // Créer un Blob avec le contenu du fichier
+            const blob = new Blob([fileContent], { type: selectedFormat === 'json' ? 'application/json' : 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `diarization.${selectedFormat}`; // Nom du fichier
+            link.click(); // Déclenche le téléchargement
+        });
+    }
 };
 
 socket.onclose = () => {
@@ -133,4 +194,11 @@ stopButton.onclick = () => {
     startButton.disabled = false;
     stopButton.disabled = true;
     console.log("Recording stopped.");
+
+    // Envoyer un signal au serveur pour lui indiquer que l'enregistrement est terminé
+    socket.send(JSON.stringify({ message: 'stop' }));
+    console.log("Message 'stop' sent.");
+
+    // Réinitialiser les morceaux pour préparer un nouvel enregistrement
+    audioChunks = [];  // Vider les morceaux d'audio
 };
