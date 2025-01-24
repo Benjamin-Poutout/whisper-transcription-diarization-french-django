@@ -3,7 +3,10 @@ import os
 import logging
 from channels.generic.websocket import AsyncWebsocketConsumer
 from pydub import AudioSegment
-from transformers import pipeline, AutoProcessor, AutoModelForSpeechSeq2Seq
+from transformers import WhisperProcessor, WhisperForConditionalGeneration, pipeline
+from transformers import WhisperFeatureExtractor
+from transformers import WhisperTokenizer
+from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
 import torch
 import soundfile as sf
 from pyannote.audio import Pipeline
@@ -11,9 +14,9 @@ import json
 import time
 
 diarization_pipeline = Pipeline.from_pretrained(
-  "pyannote/speaker-diarization",
-  use_auth_token="your_token_here")
-diarization_pipeline = diarization_pipeline.to(torch.device('cuda:0'))
+    "pyannote/speaker-diarization",
+    use_auth_token="your_token_here"
+).to(torch.device('cuda:0'))
 
 # Modèle ASR (chargé au démarrage)
 model_id = "bofenghuang/whisper-large-v3-french"
@@ -24,7 +27,7 @@ model = AutoModelForSpeechSeq2Seq.from_pretrained(
     model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
 )
 model.to(device)
-processor = AutoProcessor.from_pretrained(model_id)
+processor = WhisperProcessor.from_pretrained(model_id)
 model_pipeline = pipeline(
     "automatic-speech-recognition",
     model=model,
@@ -32,6 +35,7 @@ model_pipeline = pipeline(
     feature_extractor=processor.feature_extractor,
     torch_dtype=torch_dtype,
     device=device,
+    return_timestamps=True,
 )
 
 class TranscriptionConsumer(AsyncWebsocketConsumer):
@@ -119,21 +123,21 @@ class TranscriptionConsumer(AsyncWebsocketConsumer):
             
             # Si start_time et end_time sont fournis, découper l'audio
             if start_time is not None and end_time is not None:
-                # Découper l'audio en fonction des timestamps
                 start_sample = int(start_time * sample_rate)
                 end_sample = int(end_time * sample_rate)
                 audio_data = audio_data[start_sample:end_sample]
-            
+
             # Traiter l'audio avec le modèle pipeline
             result = model_pipeline(audio_data, return_timestamps=return_timestamps)
-            
+
             # Si le modèle retourne du texte (sans segments temporels)
             if "text" in result:
-                return result["text"]
+                return result["text"]  # Retour uniquement le texte, sans timestamps.
+
             else:
                 logging.error("Unexpected result format: 'text' not found.")
                 return "Error: Unexpected result format."
-    
+
         except Exception as e:
             logging.error(f"Error during transcription: {e}")
             return f"Error during transcription: {str(e)}"
@@ -193,7 +197,7 @@ class TranscriptionConsumer(AsyncWebsocketConsumer):
                 }
                 chunks_to_transcribe.append(chunk)
 
-            # Effectuer la transcription pour chaque chunk
+            # Effectuer la transcription pour chaque chunk (sans timestamps)
             transcription_results = []
             for chunk in chunks_to_transcribe:
                 # Transcrire chaque segment audio
